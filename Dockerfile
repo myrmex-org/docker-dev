@@ -55,6 +55,6 @@ WORKDIR /home/$USERNAME/app
 RUN npm install -g mocha istanbul
 
 # Create symlink to enable the Lager cli
-RUN cd ~/.node/bin && ln -s ../lib/node_modules/@lager/lager/src/bin/lager lager
+RUN cd ~/.node/bin && ln -s ../lib/node_modules/@lager/cli/src/bin/lager lager
 
 CMD ["node"]
