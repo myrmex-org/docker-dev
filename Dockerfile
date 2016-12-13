@@ -51,11 +51,6 @@ RUN echo "prefix = ~/.node" >> ~/.npmrc &&\
     echo "export PATH=$PATH:/home/$DEFAULT_USER/.node/bin/" >> ~/.zshrc
 ENV PATH $PATH:/home/$DEFAULT_USER/.node/bin/
 
-# Create a directory to share the application sources
-RUN mkdir /home/$DEFAULT_USER/app
-
-WORKDIR /home/$DEFAULT_USER/app
-
 # Common packages for tests
 RUN npm install -g mocha istanbul bunyan
 
@@ -64,5 +59,10 @@ RUN mkdir /home/lager/.node/lib/node_modules/@lager
 
 # Create symlink to enable the Lager cli
 RUN cd ~/.node/bin && ln -s ../lib/node_modules/@lager/cli/src/bin/lager lager
+
+# Create a directory to share the application sources
+ENV WORKDIR /home/$DEFAULT_USER/app
+RUN mkdir $WORKDIR
+WORKDIR $WORKDIR
 
 CMD ["zsh"]
