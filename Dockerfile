@@ -4,7 +4,7 @@ FROM ubuntu:latest
 MAINTAINER Alexis N-o "alexis@henaut.net"
 
 ENV NODE_VERSION=4.4.7
-ENV USERNAME=lager
+ENV DEFAULT_USER=lager
 
 # Install useful packages for a Node.js development environment
 RUN apt-get update &&\
@@ -26,33 +26,38 @@ RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="lager"/g' /root/.zshrc &&\
     sed -i 's/# DISABLE_AUTO_UPDATE=true/DISABLE_AUTO_UPDATE=true/g' /root/.zshrc &&\
     echo TERM=xterm >> /root/.zshrc
 
-# Create user "lager"
-RUN useradd $USERNAME -m -d /home/$USERNAME/ -s /bin/zsh -G sudo && passwd -d -u $USERNAME
-
-# Add a script to modify the UID / GID for user "lager" if needed
+# Add a script to modify the UID / GID for the default user if needed
 COPY /usr/local/bin/change-uid /usr/local/bin/change-uid
 RUN chmod +x /usr/local/bin/change-uid
 
+# Add entrypoint
+COPY /entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["bash", "/entrypoint.sh"]
+
+# Create user "lager"
+RUN useradd $DEFAULT_USER -m -d /home/$DEFAULT_USER/ -s /bin/zsh -G sudo && passwd -d -u $DEFAULT_USER
+
 # Configure zsh and git for user "lager"
-USER $USERNAME
+USER $DEFAULT_USER
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true &&\
-    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="lager"/g' /home/$USERNAME/.zshrc &&\
-    sed -i 's/# DISABLE_AUTO_UPDATE=true/DISABLE_AUTO_UPDATE=true/g' /home/$USERNAME/.zshrc &&\
-    echo TERM=xterm >> /home/$USERNAME/.zshrc
-COPY /.oh-my-zsh/themes/lager.zsh-theme /home/$USERNAME/.oh-my-zsh/themes/lager.zsh-theme
+    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="lager"/g' /home/$DEFAULT_USER/.zshrc &&\
+    sed -i 's/# DISABLE_AUTO_UPDATE=true/DISABLE_AUTO_UPDATE=true/g' /home/$DEFAULT_USER/.zshrc &&\
+    echo TERM=xterm >> /home/$DEFAULT_USER/.zshrc
+COPY /.oh-my-zsh/themes/lager.zsh-theme /home/$DEFAULT_USER/.oh-my-zsh/themes/lager.zsh-theme
 
 # Setup to install npm packages globally with user lager
 RUN echo "prefix = ~/.node" >> ~/.npmrc &&\
-    echo "export PATH=$PATH:/home/$USERNAME/.node/bin/" >> ~/.zshrc
-ENV PATH $PATH:/home/$USERNAME/.node/bin/
+    echo "export PATH=$PATH:/home/$DEFAULT_USER/.node/bin/" >> ~/.zshrc
+ENV PATH $PATH:/home/$DEFAULT_USER/.node/bin/
 
 # Create a directory to share the application sources
-RUN mkdir /home/$USERNAME/app
+RUN mkdir /home/$DEFAULT_USER/app
 
-WORKDIR /home/$USERNAME/app
+WORKDIR /home/$DEFAULT_USER/app
 
 # Common packages for tests
-RUN npm install -g mocha istanbul
+RUN npm install -g mocha istanbul bunyan
 
 # Create this directory so it will not belongs to the root user when we mount volumes here
 RUN mkdir /home/lager/.node/lib/node_modules/@lager
@@ -60,4 +65,4 @@ RUN mkdir /home/lager/.node/lib/node_modules/@lager
 # Create symlink to enable the Lager cli
 RUN cd ~/.node/bin && ln -s ../lib/node_modules/@lager/cli/src/bin/lager lager
 
-CMD ["node"]
+CMD ["zsh"]
