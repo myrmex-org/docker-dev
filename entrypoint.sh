@@ -9,7 +9,7 @@ if [ `whoami` = "root" ]; then
             echo "Changing $DEFAULT_USER UID to $HOST_UID"
             change-uid $HOST_UID $HOST_GID >/dev/null
         fi
-        sudo -i -E -u $DEFAULT_USER sh -c 'cd '$WORKDIR'; '$@
+        su $DEFAULT_USER -c $@
         exit
     fi
 fi
