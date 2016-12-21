@@ -52,7 +52,7 @@ RUN echo "prefix = ~/.node" >> ~/.npmrc &&\
 ENV PATH $PATH:/home/$DEFAULT_USER/.node/bin/
 
 # Common packages for tests
-RUN npm install -g mocha istanbul bunyan
+RUN npm install -g mocha istanbul bunyan @lager/cli
 
 # Create this directory so it will not belongs to the root user when we mount volumes here
 RUN mkdir /home/lager/.node/lib/node_modules/@lager
