@@ -54,12 +54,6 @@ ENV PATH $PATH:/home/$DEFAULT_USER/.node/bin/
 # Common packages for tests
 RUN npm install -g mocha istanbul bunyan @lager/cli
 
-# Create this directory so it will not belongs to the root user when we mount volumes here
-RUN mkdir /home/lager/.node/lib/node_modules/@lager
-
-# Create symlink to enable the Lager cli
-RUN cd ~/.node/bin && ln -s ../lib/node_modules/@lager/cli/src/bin/lager lager
-
 # Create a directory to share the application sources
 ENV WORKDIR /home/$DEFAULT_USER/app
 RUN mkdir $WORKDIR
