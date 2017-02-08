@@ -14,8 +14,7 @@ RUN apt-get update &&\
     wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz &&\
     tar xvzf node-v${NODE_VERSION}-linux-x64.tar.gz &&\
     ln -s /opt/node-v${NODE_VERSION}-linux-x64/bin/node /usr/local/bin/node &&\
-    ln -s /opt/node-v${NODE_VERSION}-linux-x64/bin/npm /usr/local/bin/npm &&\
-    curl -L https://www.npmjs.com/install.sh | sh
+    ln -s /opt/node-v${NODE_VERSION}-linux-x64/bin/npm /usr/local/bin/npm
 
 # Install oh-my-zsh and define zsh as default shell
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true &&\
