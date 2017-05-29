@@ -3,7 +3,7 @@ FROM ubuntu:latest
 
 MAINTAINER Alexis N-o "alexis@henaut.net"
 
-ENV NODE_VERSION=6.10
+ENV NODE_VERSION=6.10.3
 ENV DEFAULT_USER=myrmex
 
 # Install useful packages for a Node.js development environment
