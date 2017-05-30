@@ -3,6 +3,7 @@ FROM ubuntu:latest
 
 MAINTAINER Alexis N-o "alexis@henaut.net"
 
+ENV LANG=C.UTF-8
 ENV NODE_VERSION=6.10.3
 ENV DEFAULT_USER=myrmex
 
