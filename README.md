@@ -1,9 +1,7 @@
 Myrmex development environment image
 ===
 
-This repository contains the Dockerfile used for the automated build of the image `myrmex/dev`.
-
-This image is useful to set up a development environment to work on Lager or Lager plugins.
+This image is useful to set up a development environment to work on [Myrmex](https://myrmex-org.github.io/) or Myrmex plugins.
 
 The default user is `myrmex`.
 
