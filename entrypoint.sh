@@ -9,6 +9,7 @@ if [ `whoami` = "root" ]; then
             echo "Changing $DEFAULT_USER UID to $HOST_UID"
             change-uid $HOST_UID $HOST_GID >/dev/null
         fi
+        chown $DEFAULT_USER:$DEFAULT_USER /home/$DEFAULT_USER/.zsh_history
         su $DEFAULT_USER -c $@
         exit
     fi

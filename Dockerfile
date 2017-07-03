@@ -15,7 +15,9 @@ RUN apt-get update &&\
     wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz &&\
     tar xvzf node-v${NODE_VERSION}-linux-x64.tar.gz &&\
     ln -s /opt/node-v${NODE_VERSION}-linux-x64/bin/node /usr/local/bin/node &&\
-    ln -s /opt/node-v${NODE_VERSION}-linux-x64/bin/npm /usr/local/bin/npm
+    ln -s /opt/node-v${NODE_VERSION}-linux-x64/bin/npm /usr/local/bin/npm &&\
+    curl -O https://bootstrap.pypa.io/get-pip.py &&\
+    python get-pip.py
 
 # Install Docker. Indeed, we want to be able to run docker in docker
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &&\
@@ -53,7 +55,6 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
     sed -i 's/# DISABLE_AUTO_UPDATE=true/DISABLE_AUTO_UPDATE=true/g' /home/$DEFAULT_USER/.zshrc &&\
     echo TERM=xterm >> /home/$DEFAULT_USER/.zshrc
 COPY /.oh-my-zsh/themes/myrmex.zsh-theme /home/$DEFAULT_USER/.oh-my-zsh/themes/myrmex.zsh-theme
-
 
 # Set zsh history in a directory so it can be persisted with a volume
 RUN mkdir /home/$DEFAULT_USER/.zsh_history
